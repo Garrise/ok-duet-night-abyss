@@ -26,28 +26,28 @@ class ImportTask(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.icon = FluentIcon.FLAG
+        self.name = "使用外部移动逻辑自动打本"
         self.description = "全自动"
-        self.config_type['外部文件夹'] = {
-            "type": "drop_down",
-            "options": self.load_direct_folder(f'{Path.cwd()}\mod'),
-        }
+
         self.default_config.update({
             '轮次': 10,
-            '超时时间': 120,
             '外部文件夹': ""
         })
-        self.config_description = {
-            '轮次': '如果是无尽关卡，选择打几个轮次',
-            '超时时间': '战斗超时后将重启',
-            '外部文件夹': '选择mod目录下的外部逻辑'
-        }
         self.config_type['外部文件夹'] = {
             "type": "drop_down",
             "options": self.load_direct_folder(f'{Path.cwd()}\mod'),
         }
+
         self.setup_commission_config()
-        self.default_config.pop("启用自动穿引共鸣", None)
-        self.name = "使用外部移动逻辑自动打本"
+        keys_to_remove = ["启用自动穿引共鸣"]
+        for key in keys_to_remove:
+            self.default_config.pop(key, None)
+        
+        self.config_description.update({
+            '轮次': '如果是无尽关卡，选择打几个轮次',
+            '外部文件夹': '选择mod目录下的外部逻辑'
+        })
+        
         self.action_timeout = 10
         self.quick_move_task = QuickMoveTask(self)    
         

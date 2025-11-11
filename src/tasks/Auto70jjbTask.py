@@ -19,20 +19,22 @@ class Auto70jjbTask(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.icon = FluentIcon.FLAG
+        self.name = "自动70级皎皎币本"
         self.description = "全自动"
+
         self.default_config.update({
             '轮次': 1,
-            '波次超时时间': 120,
         })
-        self.config_description = {
-            '轮次': '打几个轮次',
-            '波次超时时间': '超时后将重启',
-        }
+
         self.setup_commission_config()
         keys_to_remove = ["启用自动穿引共鸣", "自动选择首个密函和密函奖励"]
         for key in keys_to_remove:
             self.default_config.pop(key, None)
-        self.name = "自动70级皎皎币本"
+
+        self.config_description.update({
+            '轮次': '打几个轮次',
+        })
+        
         self.action_timeout = 10
         self.quick_move_task = QuickMoveTask(self)
         
@@ -66,7 +68,7 @@ class Auto70jjbTask(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
                         _wave_start = time.time()
                         _wait_next_wave = False
                     _skill_time = self.use_skill(_skill_time)
-                    if not _wait_next_wave and time.time() - _wave_start >= self.config.get('波次超时时间', 120):
+                    if not _wait_next_wave and time.time() - _wave_start >= self.config.get('超时时间', 120):
                         self.log_info('任务超时')
                         self.open_in_mission_menu()
                         self.sleep(0.5)

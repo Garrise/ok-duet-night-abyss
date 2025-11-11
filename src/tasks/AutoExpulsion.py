@@ -15,19 +15,24 @@ class AutoExpulsion(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.icon = FluentIcon.FLAG
+        self.name = "自动驱离"
         self.description = "全自动"
+
         self.default_config.update({
             '随机游走': False,
-            '任务超时时间': 120,
             '刷几次': 999,
         })
+
+        self.setup_commission_config()
+        keys_to_remove = ["启用自动穿引共鸣"]
+        for key in keys_to_remove:
+            self.default_config.pop(key, None)
+
         self.config_description.update({
             '随机游走': '是否在任务中随机移动',
-            '任务超时时间': '放弃任务前等待的秒数',
         })
-        self.setup_commission_config()
+
         self.default_config.pop("启用自动穿引共鸣", None)
-        self.name = "自动驱离"
         self.action_timeout = 10
 
     def run(self):
@@ -55,7 +60,7 @@ class AutoExpulsion(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
                     _start_time = time.time()
                 _skill_time = self.use_skill(_skill_time)
                 _random_walk_time = self.random_walk(_random_walk_time)
-                if time.time() - _start_time >= self.config.get("任务超时时间", 120):
+                if time.time() - _start_time >= self.config.get("超时时间", 120):
                     logger.info("已经超时，重开任务...")
                     self.give_up_mission()
                     self.wait_until(lambda: not self.in_team(), time_out=30, settle_time=1)

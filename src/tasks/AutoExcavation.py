@@ -16,15 +16,21 @@ class AutoExcavation(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.icon = FluentIcon.FLAG
+        self.name = "自动勘察"
         self.description = "半自动"
         self.default_config.update({
             '轮次': 3,
         })
-        self.config_description = {
-            "轮次": "打几个轮次",
-        }
+        
         self.setup_commission_config()
-        self.name = "自动勘察"
+        keys_to_remove = ["超时时间"]
+        for key in keys_to_remove:
+            self.default_config.pop(key, None)
+
+        self.config_description.update({
+            "轮次": "打几个轮次",
+        })
+        
         self.action_timeout = 10
         self.progressing = False
         self.quick_move_task = QuickMoveTask(self)

@@ -17,35 +17,23 @@ class Auto65ArtifactTask_Fast(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.icon = FluentIcon.FLAG  # 任务图标
+        self.icon = FluentIcon.FLAG
+        self.name = "自动30/65级魔之楔本"
         self.description = "全自动"
 
-        # 配置参数
-        self.default_config.update(
-            {
-                "任务超时时间": 180,  # 单次任务超时时间（秒）
-                "刷几次": 999,  # 重复次数
-            }
-        )
+        self.default_config.update({
+            "刷几次": 999,
+        })
 
-        # 配置说明
-        self.config_description.update(
-            {
-                "任务超时时间": "单次任务超时后将放弃并重新开始",
-                "刷几次": "总共刷多少次副本",
-            }
-        )
-
-        # 设置委托相关配置
         self.setup_commission_config()
-
-        # 移除不需要的配置项
         keys_to_remove = ["启用自动穿引共鸣", "自动选择首个密函和密函奖励"]
         for key in keys_to_remove:
             self.default_config.pop(key, None)
 
-        # 任务名称（在UI中显示）
-        self.name = "自动30/65级魔之楔本"  # 修改为你的副本名称
+        self.config_description.update({
+            "刷几次": "总共刷多少次副本",
+        })
+        
         self.action_timeout = 10
 
     def run(self):
@@ -90,7 +78,7 @@ class Auto65ArtifactTask_Fast(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
 
                 # 检查是否超时
                 elapsed = time.time() - _start_time
-                if elapsed >= self.config.get("任务超时时间", 180):
+                if elapsed >= self.config.get("超时时间", 180):
                     logger.warning(f"任务超时 ({elapsed:.1f}秒)，重新开始...")
                     self.give_up_mission()
                     self.wait_until(lambda: not self.in_team(), time_out=30, settle_time=1)

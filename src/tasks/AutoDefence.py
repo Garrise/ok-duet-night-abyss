@@ -14,16 +14,20 @@ class AutoDefence(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.icon = FluentIcon.FLAG
+        self.name = "自动扼守"
         self.description = "半自动"
+
         self.default_config.update({
             '轮次': 3,
         })
-        self.config_description = {
+        
+        self.setup_commission_config()
+        
+        self.config_description.update({
             "轮次": "打几个轮次",
             "超时时间": "波次超时后将发出提示",
-        }
-        self.setup_commission_config()
-        self.name = "自动扼守"
+        })
+
         self.action_timeout = 10
         self.quick_move_task = QuickMoveTask(self)
         self.external_movement = lambda: False

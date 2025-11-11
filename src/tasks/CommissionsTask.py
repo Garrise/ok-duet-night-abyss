@@ -24,6 +24,7 @@ class CommissionsTask(BaseDNATask):
 
     def setup_commission_config(self):
         self.default_config.update({
+            '超时时间': 120,
             "委托手册": "不使用",
             "使用技能": "不使用",
             "技能释放频率": 5.0,
@@ -32,6 +33,7 @@ class CommissionsTask(BaseDNATask):
             "自动选择首个密函和密函奖励": True,
         })
         self.config_description.update({
+            "超时时间": "超时后将重启任务",
             "技能释放频率": "毎几秒释放一次技能",
             "启用自动穿引共鸣": "在需要跑图时时启用触发任务的自动穿引共鸣",
             "发出声音提醒": "在需要时发出声音提醒",
